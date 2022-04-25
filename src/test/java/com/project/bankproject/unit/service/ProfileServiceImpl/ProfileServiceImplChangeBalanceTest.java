@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -47,6 +48,7 @@ public class ProfileServiceImplChangeBalanceTest {
             profileService.changeBalance(number);
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(profileRepository, times(0)).save(any(Profile.class));
         }
     }
 
@@ -60,6 +62,7 @@ public class ProfileServiceImplChangeBalanceTest {
             profileService.changeBalance(number);
         } catch (EntityNotFoundException exception) {
             assertEquals("Profile NOT FOUND", exception.getMessage());
+            verify(profileRepository, times(0)).save(any(Profile.class));
         }
     }
 
@@ -79,7 +82,7 @@ public class ProfileServiceImplChangeBalanceTest {
         assertSame(user, result.getUser());
         assertEquals(firstName, result.getFirstName());
         assertEquals(lastName, result.getLastName());
-        verify(profileRepository, times(0)).save(same(profile));
+        verify(profileRepository, times(0)).save(any(Profile.class));
     }
 
     @Test
@@ -97,6 +100,7 @@ public class ProfileServiceImplChangeBalanceTest {
             profileService.changeBalance(number);
         } catch (BalanceException exception) {
             assertEquals("Not enough cash on the Profile balance", exception.getMessage());
+            verify(profileRepository, times(0)).save(any(Profile.class));
         }
     }
 

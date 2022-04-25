@@ -14,6 +14,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -48,8 +50,8 @@ public class AuthServiceImplLoginTest {
             authService.login(login, password);
         } catch (EntityNotFoundException exception) {
             assertEquals("User with login: " + login + " NOT FOUND", exception.getMessage());
-            verify(passwordEncoder, times(0)).matches(same(login), same(password));
-            verify(tokenService, times(0)).generateToken(same(user));
+            verify(passwordEncoder, times(0)).matches(anyString(), anyString());
+            verify(tokenService, times(0)).generateToken(any(User.class));
         }
     }
 
@@ -77,7 +79,7 @@ public class AuthServiceImplLoginTest {
             authService.login(login, password);
         } catch (EntityNotFoundException exception) {
             assertEquals("Password is not correct", exception.getMessage());
-            verify(tokenService, times(0)).generateToken(same(user));
+            verify(tokenService, times(0)).generateToken(any(User.class));
         }
     }
 }

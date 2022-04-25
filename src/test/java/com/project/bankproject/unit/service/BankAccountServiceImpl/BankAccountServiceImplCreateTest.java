@@ -15,6 +15,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -41,6 +44,7 @@ public class BankAccountServiceImplCreateTest {
             bankAccountService.create();
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(bankAccountRepository, times(0)).save(any(BankAccount.class));
         }
     }
 
@@ -63,6 +67,7 @@ public class BankAccountServiceImplCreateTest {
             bankAccountService.create();
         } catch (BankAccountsException exception) {
             assertEquals("Count of Bank Accounts of user " + user.getLogin() + " is max", exception.getMessage());
+            verify(bankAccountRepository, times(0)).save(any(BankAccount.class));
         }
     }
 
@@ -70,12 +75,12 @@ public class BankAccountServiceImplCreateTest {
     public void testPositive() {
         String login = "mockLogin";
         User user = new User().setLogin(login);
+        BankAccount source = new BankAccount().setBalance(0.0D).setUser(user);
         when(currentUserService.currentUser()).thenReturn(user);
-        BankAccount source = new BankAccount().setBalance(0.0D);
-        user.addBankAccounts(source);
         when(bankAccountRepository.save(source)).thenReturn(source);
         BankAccount result = bankAccountService.create();
         assertSame(user, result.getUser());
         assertEquals(0.0D, result.getBalance());
+        assertEquals(result, user.getBankAccounts().get(0));
     }
 }

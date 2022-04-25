@@ -16,6 +16,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -42,6 +45,7 @@ public class BankAccountServiceImplFindAllByUserIdTest {
             bankAccountService.findAllByUserId();
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(bankAccountRepository, times(0)).findAllByUserId(any());
         }
     }
 

@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -46,6 +47,7 @@ public class ProfileServiceImplCreateTest {
             profileService.create(profile);
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(profileRepository, times(0)).save(any(Profile.class));
         }
     }
 
@@ -80,6 +82,6 @@ public class ProfileServiceImplCreateTest {
         assertEquals(lastName, result.getLastName());
         assertEquals(0.0D, result.getBalance());
         assertSame(user, result.getUser());
-        verify(profileRepository, times(0)).save(same(profile));
+        verify(profileRepository, times(0)).save(any(Profile.class));
     }
 }

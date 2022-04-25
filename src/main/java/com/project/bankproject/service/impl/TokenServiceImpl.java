@@ -35,8 +35,7 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public String validateTokenAndGetLogin(String token) {
-        Claims claims = Jwts
-                .parser()
+        Claims claims = Jwts.parser()
                 .setSigningKey(SECRET_KEY)
                 .parseClaimsJws(token)
                 .getBody();

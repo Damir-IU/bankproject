@@ -5,7 +5,6 @@ import com.project.bankproject.domain.entity.User;
 import com.project.bankproject.domain.exception.BalanceException;
 import com.project.bankproject.domain.exception.EntityNotFoundException;
 import com.project.bankproject.security.exception.JwtAuthenticationException;
-import com.project.bankproject.service.BankAccountService;
 import com.project.bankproject.service.CurrentUserService;
 import com.project.bankproject.service.ProfileService;
 import com.project.bankproject.service.impl.TransferServiceImpl;
@@ -18,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -46,6 +48,7 @@ public class TransferServiceImplTransferFromProfileToProfileTest {
             transferService.transferFromProfileToProfile(profileId, number);
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 
@@ -60,6 +63,7 @@ public class TransferServiceImplTransferFromProfileToProfileTest {
             transferService.transferFromProfileToProfile(profileId, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("Profile NOT FOUND", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 
@@ -78,6 +82,7 @@ public class TransferServiceImplTransferFromProfileToProfileTest {
             transferService.transferFromProfileToProfile(profileId, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("Profile with id: " + profileId + " NOT FOUND", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 
@@ -96,6 +101,7 @@ public class TransferServiceImplTransferFromProfileToProfileTest {
             transferService.transferFromProfileToProfile(profileId, number);
         } catch (BalanceException exception) {
             assertEquals("Not enough cash on the source Profile balance", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 

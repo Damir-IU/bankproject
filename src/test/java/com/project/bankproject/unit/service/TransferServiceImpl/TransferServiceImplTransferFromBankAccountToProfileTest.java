@@ -17,6 +17,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -46,6 +49,8 @@ public class TransferServiceImplTransferFromBankAccountToProfileTest {
             transferService.transferFromBankAccountToProfile(fromBankAccountId, toProfileId, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("BankAccount with id: " + fromBankAccountId + " NOT FOUND", exception.getMessage());
+            verify(bankAccountService, times(0)).update(any(BankAccount.class));
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 
@@ -62,6 +67,8 @@ public class TransferServiceImplTransferFromBankAccountToProfileTest {
             transferService.transferFromBankAccountToProfile(fromBankAccountId, toProfileId, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("Profile with id: " + toProfileId + " NOT FOUND", exception.getMessage());
+            verify(bankAccountService, times(0)).update(any(BankAccount.class));
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 
@@ -78,6 +85,8 @@ public class TransferServiceImplTransferFromBankAccountToProfileTest {
             transferService.transferFromBankAccountToProfile(fromBankAccountId, toProfileId, number);
         } catch (BalanceException exception) {
             assertEquals("Not enough cash on the source Bank Account balance", exception.getMessage());
+            verify(bankAccountService, times(0)).update(any(BankAccount.class));
+            verify(profileService, times(0)).update(any(Profile.class));
         }
     }
 

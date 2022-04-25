@@ -19,6 +19,10 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -48,6 +52,8 @@ public class BankAccountServiceImplDeleteTest {
             bankAccountService.delete(id);
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
+            verify(bankAccountRepository, times(0)).delete(any(BankAccount.class));
         }
     }
 
@@ -62,6 +68,8 @@ public class BankAccountServiceImplDeleteTest {
             bankAccountService.delete(id);
         } catch (EntityNotFoundException exception) {
             assertEquals("BankAccount with id: " + id + " NOT FOUND", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
+            verify(bankAccountRepository, times(0)).delete(any(BankAccount.class));
         }
     }
 
@@ -76,6 +84,7 @@ public class BankAccountServiceImplDeleteTest {
         when(bankAccountRepository.findById(id)).thenReturn(Optional.of(bankAccount));
         bankAccountService.delete(id);
         assertEquals(0, user.getBankAccounts().size());
+        verify(profileService, times(0)).update(any(Profile.class));
     }
 
 
@@ -92,6 +101,8 @@ public class BankAccountServiceImplDeleteTest {
             bankAccountService.delete(id);
         } catch (EntityNotFoundException exception) {
             assertEquals("Profile NOT FOUND and balance of Bank Account more than 0", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
+            verify(bankAccountRepository, times(0)).delete(any(BankAccount.class));
         }
     }
 

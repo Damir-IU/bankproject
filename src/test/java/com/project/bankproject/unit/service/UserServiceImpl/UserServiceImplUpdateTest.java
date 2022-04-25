@@ -17,6 +17,8 @@ import java.util.UUID;
 
 import static com.project.bankproject.domain.entity.Role.ROLE_USER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -52,9 +54,9 @@ public class UserServiceImplUpdateTest {
             userService.update(id, source);
         } catch (EntityNotFoundException exception) {
             assertEquals("User with id: " + id + " NOT FOUND", exception.getMessage());
-            verify(userMapper, times(0)).merge(same(source), same(target));
-            verify(passwordEncoder, times(0)).encode(same(source.getPassword()));
-            verify(userRepository, times(0)).save(same(source));
+            verify(userMapper, times(0)).merge(any(User.class), any(User.class));
+            verify(passwordEncoder, times(0)).encode(anyString());
+            verify(userRepository, times(0)).save(any(User.class));
         }
     }
 

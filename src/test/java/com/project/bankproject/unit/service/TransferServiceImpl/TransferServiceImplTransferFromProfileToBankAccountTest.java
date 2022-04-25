@@ -19,6 +19,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -49,6 +52,8 @@ public class TransferServiceImplTransferFromProfileToBankAccountTest {
             transferService.transferFromProfileToBankAccount(toBankAccountId, number);
         } catch (JwtAuthenticationException exception) {
             assertEquals("JWT token is invalid or empty", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
+            verify(bankAccountService, times(0)).update(any(BankAccount.class));
         }
     }
 
@@ -63,6 +68,8 @@ public class TransferServiceImplTransferFromProfileToBankAccountTest {
             transferService.transferFromProfileToBankAccount(toBankAccountId, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("Profile NOT FOUND", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
+            verify(bankAccountService, times(0)).update(any(BankAccount.class));
         }
     }
 
@@ -81,6 +88,8 @@ public class TransferServiceImplTransferFromProfileToBankAccountTest {
             transferService.transferFromProfileToBankAccount(toBankAccountId, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("BankAccount with id: " + toBankAccountId + " NOT FOUND", exception.getMessage());
+            verify(profileService, times(0)).update(any(Profile.class));
+            verify(bankAccountService, times(0)).update(any(BankAccount.class));
         }
     }
 

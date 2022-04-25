@@ -15,6 +15,9 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 /**
@@ -40,6 +43,7 @@ public class BankAccountServiceImplChangeBalanceTest {
             bankAccountService.changeBalance(id, number);
         } catch (EntityNotFoundException exception) {
             assertEquals("BankAccount with id: " + id + " NOT FOUND", exception.getMessage());
+            verify(bankAccountRepository, times(0)).save(any(BankAccount.class));
         }
     }
 
@@ -51,6 +55,7 @@ public class BankAccountServiceImplChangeBalanceTest {
         when(bankAccountRepository.findById(id)).thenReturn(Optional.of(bankAccount));
         BankAccount result = bankAccountService.changeBalance(id, number);
         assertEquals(123D, result.getBalance());
+        verify(bankAccountRepository, times(0)).save(any(BankAccount.class));
     }
 
     @Test
@@ -63,6 +68,7 @@ public class BankAccountServiceImplChangeBalanceTest {
             bankAccountService.changeBalance(id, number);
         } catch (BalanceException exception) {
             assertEquals("Not enough cash on the balance", exception.getMessage());
+            verify(bankAccountRepository, times(0)).save(any(BankAccount.class));
         }
     }
 

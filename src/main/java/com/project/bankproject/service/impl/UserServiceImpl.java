@@ -32,8 +32,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(UUID id) {
-        User result = userRepository
-                .findById(id)
+        User result = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("User with id: " + id + " NOT FOUND"));
         return result;
     }
